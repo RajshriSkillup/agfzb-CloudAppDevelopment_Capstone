@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import CarMake, CarModel
 
 # Register your models here.
+#  Test comment added
 
 # CarModelInline class
 class CarModelInline(admin.StackedInline):
