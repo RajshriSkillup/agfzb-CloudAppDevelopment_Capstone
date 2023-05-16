@@ -6,11 +6,8 @@ from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
 from ibm_watson import NaturalLanguageUnderstandingV1
 from ibm_watson.natural_language_understanding_v1 import Features,SentimentOptions
 import time
+ 
 
-
-# Create a `get_request` to make HTTP GET requests
-# e.g., response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
-#                                     auth=HTTPBasicAuth('apikey', api_key))
 
 def get_request(url, **kwargs):
     
@@ -39,8 +36,7 @@ def get_request(url, **kwargs):
     json_data = json.loads(response.text)
     return json_data
 
-# Create a `post_request` to make HTTP POST requests
-# e.g., response = requests.post(url, params=kwargs, json=payload)
+
 def post_request(url, payload, **kwargs):
     print(kwargs)
     print("POST to {} ".format(url))
@@ -52,10 +48,6 @@ def post_request(url, payload, **kwargs):
     return json_data
 
 
-# Create a get_dealers_from_cf method to get dealers from a cloud function
-# def get_dealers_from_cf(url, **kwargs):
-# - Call get_request() with specified arguments
-# - Parse JSON results into a CarDealer object list
 def get_dealers_from_cf(url, **kwargs):
     results = []
     state = kwargs.get("state")
@@ -77,11 +69,13 @@ def get_dealers_from_cf(url, **kwargs):
             # print(dealer_doc)
             # Create a CarDealer object with values in `doc` object
             dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"],
-                                   id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"], full_name=dealer_doc["full_name"],                             
+                                   id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"], full_name=dealer_doc["full_name"],
+                                
                                    st=dealer_doc["st"], zip=dealer_doc["zip"])
             results.append(dealer_obj)
 
     return results
+
 
 def get_dealer_by_id_from_cf(url, id):
     json_result = get_request(url, id=id)
@@ -94,8 +88,10 @@ def get_dealer_by_id_from_cf(url, id):
         dealer_doc = dealers[0]
         dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"],
                                 id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"], full_name=dealer_doc["full_name"],
+                                
                                 st=dealer_doc["st"], zip=dealer_doc["zip"])
     return dealer_obj
+
 
 def get_dealer_reviews_from_cf(url, **kwargs):
     results = []
@@ -130,23 +126,17 @@ def get_dealer_reviews_from_cf(url, **kwargs):
             results.append(review_obj)
 
     return results
-    
 
 
-# Create an `analyze_review_sentiments` method to call Watson NLU and analyze text
-# def analyze_review_sentiments(text):
-# - Call get_request() with specified arguments
-# - Get the returned sentiment label such as Positive or Negative
-
-def analyze_review_sentiments(dealer_review):
-    api_key = "MTFVXig9yOjTF_iC8A27GuVHYBNFKXJrad_UDCyLmE7q"
-    url = 'https://apikey-v2-1fitqdtrawk0s2agmmlmpt7bpbqy2g56hqzpoy6dlpkx:efe7b2199ab1d3a6e6138dad6a30b1b1@28608920-23d4-4836-ab5b-f601d8e13824-bluemix.cloudantnosqldb.appdomain.cloud'
+def analyze_review_sentiments(text):
+    url = "https://api.au-syd.natural-language-understanding.watson.cloud.ibm.com/instances/c8d40d5d-1975-489a-a4ff-9f9137e6c93f"
+    api_key = "K1_z6t_8HbCINXWuDvCUykrHNIMsvQFVpmoKzpb7slKe"
     authenticator = IAMAuthenticator(api_key)
-    natural_language_understanding = NaturalLanguageUnderstandingV1(
-        version='2021-08-01', authenticator=authenticator)
+    natural_language_understanding = NaturalLanguageUnderstandingV1(version='2021-08-01',authenticator=authenticator)
     natural_language_understanding.set_service_url(url)
-    response = natural_language_understanding.analyze(text=dealer_review, features=Features(
-        sentiment=SentimentOptions(targets=[dealer_review]))).get_result()
-    label = json.dumps(response, indent=2)
+    response = natural_language_understanding.analyze( text=text+"hello hello hello",features=Features(sentiment=SentimentOptions(targets=[text+"hello hello hello"]))).get_result()
+    label=json.dumps(response, indent=2)
     label = response['sentiment']['document']['label']
+    
+    
     return(label)
