@@ -1,23 +1,22 @@
 from cloudant.client import Cloudant
 from cloudant.query import Query
-
 from flask import Flask, jsonify, request
 import atexit
 
-cloudant_username = 'apikey-v2-1ochqwrd9scjq07xwmko7rjub7ko4jlsnzn2iiubvh0j'
-cloudant_password = 'b3c3c0a1259903ba969f323a1e04517f'
-cloudant_url = 'https://apikey-v2-1ochqwrd9scjq07xwmko7rjub7ko4jlsnzn2iiubvh0j:b3c3c0a1259903ba969f323a1e04517f@60bfb015-c881-4893-9ccd-dfabbd22d38d-bluemix.cloudantnosqldb.appdomain.cloud'
-
-client = Cloudant(cloudant_username, cloudant_password, url=cloudant_url, connect=True)
+cloudant_username = 'd42a5fad-c543-4ad7-b9c9-df4a034e454e-bluemix'
+cloudant_api_key = 'aWVB5TepBHh3FdeF-t_m8vy8dJA6XfSCi3-Ot-aTu0s4'
+cloudant_url = 'https://d42a5fad-c543-4ad7-b9c9-df4a034e454e-bluemix.cloudantnosqldb.appdomain.cloud'
+client = Cloudant.iam(cloudant_username, cloudant_api_key, connect=True, url=cloudant_url)
 
 session = client.session()
-print('Username: {0}'.format(session['userCtx']['name']))
-print('Databases: {0}'.format(client.all_dbs()))
+# print('Username:', session['userCtx']['name'])
+print('Databases:', client.all_dbs())
 
 db = client['reviews']
 
-
 app = Flask(__name__)
+
+
 
 @app.route('/api/get_reviews', methods=['GET'])
 def get_reviews():
