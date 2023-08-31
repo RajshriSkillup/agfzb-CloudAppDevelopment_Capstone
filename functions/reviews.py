@@ -3,9 +3,10 @@ from cloudant.query import Query
 from flask import Flask, jsonify, request
 import atexit
 
-cloudant_username = 'd42a5fad-c543-4ad7-b9c9-df4a034e454e-bluemix'
-cloudant_api_key = 'aWVB5TepBHh3FdeF-t_m8vy8dJA6XfSCi3-Ot-aTu0s4'
-cloudant_url = 'https://d42a5fad-c543-4ad7-b9c9-df4a034e454e-bluemix.cloudantnosqldb.appdomain.cloud'
+
+cloudant_username = '8ff26903-8a9d-46d9-9a66-bee9b4b14de9-bluemix'
+cloudant_api_key = 'DFfBhypEblDkKXFz5TFmp-2RcQby-wAvqWphtL0nz5rG'
+cloudant_url = 'https://8ff26903-8a9d-46d9-9a66-bee9b4b14de9-bluemix.cloudantnosqldb.appdomain.cloud'
 client = Cloudant.iam(cloudant_username, cloudant_api_key, connect=True, url=cloudant_url)
 
 session = client.session()
